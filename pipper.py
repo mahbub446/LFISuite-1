@@ -10,63 +10,63 @@ def download(file_url,local_filename):
 	web_file.close()
 	local_file.close()
 
-def get_windows_pip_path():
+def get_windows_pip3_path():
 	python_dir = sys.executable
 	split = python_dir.split("\\")
-	pip_path = ""
+	pip3_path = ""
 	for i in range(0,len(split)-1):
-		pip_path = "%s/%s" %(pip_path,split[i])
-	pip_path = "%s/Scripts/pip" %pip_path[1:]
+		pip3_path = "%s/%s" %(pip3_path,split[i])
+	pip3_path = "%s/Scripts/pip3" %pip3_path[1:]
 
-	return pip_path
+	return pip3_path
 
-def pip_install_module(module_name):
-	pip_path = "pip"
+def pip3_install_module(module_name):
+	pip3_path = "pip3"
 	DEVNULL = open(os.devnull,'wb')
 	new_installation = True
 
 	try:
-		subprocess.call(["pip"], stdout=DEVNULL) # verify if pip is already installed
+		subprocess.call(["pip3"], stdout=DEVNULL) # verify if pip3 is already installed
 	except OSError as e:
 		if(sys.platform[:3] == "win"):
-			pip_path = get_windows_pip_path()
+			pip3_path = get_windows_pip3_path()
 			try:
-				subprocess.call([pip_path],stdout=DEVNULL)
+				subprocess.call([pip3_path],stdout=DEVNULL)
 				new_installation = False
-				print "[+] Found Windows pip executable at '%s'" %pip_path
+				print "[+] Found Windows pip3 executable at '%s'" %pip3_path
 			except:
 				pass
 
 		if(new_installation):
-			print "[!] pip is not currently installed."
+			print "[!] pip3 is not currently installed."
 
-			if(os.path.isfile("get-pip.py") is False):
-				print "[*] Downloading get-pip.py.."
-				download("https://bootstrap.pypa.io/get-pip.py","get-pip.py")
+			if(os.path.isfile("get-pip3.py") is False):
+				print "[*] Downloading get-pip3.py.."
+				download("https://bootstrap.pypa.io/get-pip3.py","get-pip3.py")
 			else:
-				print "[+] get-pip-py found in the current directory."
+				print "[+] get-pip3-py found in the current directory."
 
-	    	os.system("python get-pip.py")
+	    	os.system("python get-pip3.py")
 
 	    	try:
-	    		subprocess.call(["pip"],stdout=DEVNULL)
+	    		subprocess.call(["pip3"],stdout=DEVNULL)
 	    	except:
 	    		if(sys.platform[:3] == "win"):
 		    		python_dir = sys.executable # "C:\\Python27\\python.exe"
 		    		split = python_dir.split("\\")
-		    		pip_path = ""
+		    		pip3_path = ""
 		    		for i in range(0,len(split)-1): # let's avoid python.exe
-		    			pip_path = "%s/%s" %(pip_path,split[i])
+		    			pip3_path = "%s/%s" %(pip3_path,split[i])
 
-		    		pip_path = "%s/Scripts/pip" %pip_path[1:]
+		    		pip3_path = "%s/Scripts/pip3" %pip3_path[1:]
 
 	if(new_installation):
 		try:
-			os.remove("get-pip.py")
+			os.remove("get-pip3.py")
 		except:
 			pass
 
-	os.system("%s install --upgrade pip" %pip_path)
+	os.system("%s install --upgrade pip3" %pip3_path)
 	print "\n[*] Installing module '%s'" %module_name
-	os.system("%s install %s" %(pip_path,module_name))
+	os.system("%s install %s" %(pip3_path,module_name))
 
